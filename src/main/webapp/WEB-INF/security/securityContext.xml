@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+  		http://www.springframework.org/schema/security  
+  		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+                http://www.springframework.org/schema/context
+ 		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                http://www.springframework.org/schema/util
+                http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+   
+    <security:global-method-security secured-annotations="enabled" />
+                    
+    <security:http auto-config="true" use-expressions="true" authentication-manager-ref="authenticationManager">
+        <security:intercept-url pattern="/" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        <security:intercept-url pattern="/quarantine*" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        <security:intercept-url pattern="/adminspace*" access="hasRole('ROLE_ADMIN')" />
+        <security:form-login 
+            login-page="/login" 
+            default-target-url="/" 
+            authentication-failure-url="/login?error" 
+            username-parameter="username"
+            password-parameter="password" />
+        <security:logout logout-success-url="/login?logout" />
+      
+       <!-- <security:csrf/> -->
+    </security:http>
+
+    <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <property name="providers" value="#{${ldap.enable}?listLdapDao:listDao}" />
+    </bean>     
+    
+    <util:list id="listLdapDao">
+        <ref bean="ldapAuthProvider"/>
+        <ref bean="daoAuthProvider" />
+    </util:list>    
+    
+    <util:list id="listDao">
+        <ref bean="daoAuthProvider" />
+    </util:list>   
+    
+ 
+    <!-- Database Auth -->
+    <bean id="daoAuthProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="dbUserService"/>  
+    </bean>
+    
+    <bean id="dbUserService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">  
+        <property name="dataSource" ref="dataSource"/>  
+        <property name="usersByUsernameQuery">  
+            <value>  
+                select username,password, enabled from users where username=? 
+            </value>  
+        </property>  
+        <property name="authoritiesByUsernameQuery">  
+            <value>  
+                select username, role from user_roles where username=?                     
+            </value>  
+        </property>  
+    </bean>
+    
+    <!-- LDAP Auth-->
+    <bean id="contextSource"
+          class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+        <constructor-arg value="${ldap.url}"/>
+        <property name="userDn" value="${ldap.user}"/>
+        <property name="password" value="${ldap.password}"/>
+        <property name="baseEnvironmentProperties">
+            <map>
+                <entry>
+                    <key>
+                        <value>java.naming.referral</value>
+                    </key>
+                    <value>follow</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+   
+    <bean id="ldapAuthProvider"
+          class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+        <constructor-arg>
+            <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+                <constructor-arg ref="contextSource"/>
+                <property name="userSearch">
+                    <bean class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+                        <constructor-arg value="${ldap.usersearchdb}"/>
+                        <constructor-arg value="(&amp;(objectclass=user)(mail={0}))"/>
+                        <constructor-arg ref="contextSource"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+                <constructor-arg ref="contextSource"/>
+                <constructor-arg value="${ldap.groupsearchdb}"/>
+                <property name="groupSearchFilter" value="(&amp;(member={0}))"/>
+                <property name="searchSubtree" value="true"/>
+                <property name="rolePrefix" value="LDAP_"/>
+                <property name="defaultRole" value="ROLE_USER"/>
+                <!--<property name="ignorePartialResultException" value="true"/> -->
+            </bean>
+        </constructor-arg>
+    </bean>
+    
+</beans>

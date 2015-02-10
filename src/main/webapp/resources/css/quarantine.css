@@ -1,0 +1,235 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 22, 2014, 5:10:07 PM
+    Author     : sasav
+*/
+
+@IMPORT url("reset_style.css");
+
+body {
+    background: #d8d8d8;
+    font-family: Georgia, Arial, Helvetica, sans-serif;
+    color: #4f5259;
+    font-size: 14px;
+    min-height: 100%;
+    margin: 10px;
+}
+a {
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+table{
+    width: 100%
+}
+
+td{
+    padding: 5px;
+}
+
+#container{
+    min-width: 1240px;
+}
+
+/*HEADER*/
+
+#header {
+    height: 120px;
+    background: cornflowerblue;
+}
+
+#welcome{
+    text-align:right;
+    margin:10px;
+}
+
+#logo {
+    float: left;
+    width: 120px;
+}
+
+
+#logo img {
+    margin: 10px 0 0 20px;
+}
+/*Search box*/
+#search {
+    background: #fff;
+
+    border-top: none; 
+    border-bottom: 1px solid #000; 
+    border-left: 1px solid #000; 
+    border-right: 1px solid #000; 
+
+}
+.td_leftpadding, .td_label{
+    padding-left: 10px;
+}
+.td_label{
+    width: 60px;
+}
+.td_rightborder {
+    border-right: 1px solid #DDDDDD; 
+    padding-right: 10px;
+}
+
+.emailfield {
+    width: 100%
+}
+
+#id_datestart, #id_dateend {
+    width: 110px;
+}
+#td_search{
+    width: 65px;
+}
+
+/*Content area*/
+#content_area {
+    margin-top: 10px;
+    border: 1px solid #000;
+    background: #fff;
+}
+
+#content_table{
+    table-layout: fixed;
+}
+
+#title_data{
+    text-align: center;
+
+}
+
+#title_data td{
+    border-right: 1px solid #DDDDDD;
+    border-bottom:1px solid #000; 
+}
+
+.trItems td{
+    border-right: 1px solid #DDDDDD;
+    border-bottom:1px solid #DDDDDD; 
+}
+
+
+
+
+div[class^="text_"]{
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+#td_date{
+    width: 120px;
+
+}
+.text_from, .text_to{
+  //  width: 100%;
+    width: 230px;
+ /*   max-width: 230px;
+ */
+}
+
+.text_subject{
+    min-width: 230px;
+    max-width: 380px; 
+}
+/*
+.text_subject {
+  display: block;
+}
+*/
+
+
+#td_size {
+    width: 75px;
+} 
+
+#td_status {
+    width: 85px;
+}
+#td_action {
+   width: 70px;
+}
+
+
+/*Login Page*/
+
+#login-box{
+    width: 300px;
+    padding: 20px;
+    margin: 100px auto;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border: 1px solid #000;
+}
+#loginHeader {
+    font-size: 22px;
+    text-align: center;
+    margin: 10px;
+}
+.login_input{
+    width: 200px;
+}
+
+.error {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.msg {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+/*Error Page*/
+#error-box{
+    width: 300px;
+    height: 150px;
+    padding: 20px;
+    margin: 100px auto;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border: 1px solid #000;
+}
+#error-number{
+    font-size: 72px;
+    text-align: center;
+    margin:10px;
+
+}
+#error-message{
+    text-align: center;
+    margin:10px;
+}
+
+#error-home{
+    text-align: right;
+    margin:10px;
+
+}
+
+#error-box a{
+    text-align:right;
+    margin:10px;
+    background: cornflowerblue;
+    padding: 5px;
+}
+
+
